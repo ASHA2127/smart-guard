@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Login</title>
+  <style>
+    html, body { height: 100%; margin: 0; font-family: Arial, Helvetica, sans-serif; }
+    .bg { position: fixed; inset: 0; background: url('{{ bg_url }}') no-repeat center center fixed; background-size: cover; z-index: -1; }
+    .nav { background: #222; color: #fff; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .brand { font-weight: 700; }
+    .links a { color: #ccc; margin-left: 24px; text-decoration: none; font-size: 16px; }
+    .links a:hover { color: #fff; }
+    .hero { background:#0a0a0a; color:#fff; text-align:center; padding: 12px 20px; }
+    .hero h1 { margin:0; font-size: 20px; }
+    .hero h4 { margin:0; font-size: 14px; }
+    .content { display:flex; justify-content:center; align-items:flex-start; min-height: auto; padding: 16px 20px; }
+    .card { width: 520px; max-width: 92vw; background: rgba(0,0,0,.55); padding: 24px; border-radius: 10px; color: #fff; }
+    .card h2 { margin: 0 0 16px; text-align: center; font-size: 16px; text-transform: uppercase; }
+    .form-group { margin-bottom: 14px; display:grid; grid-template-columns: 170px 1fr; align-items:center; gap:12px; }
+    label { margin:0; font-weight:700; color:#000; background: rgba(255,255,255,.9); padding:0px 16px; border-radius:6px; display:flex; align-items:center; min-height: 44px; }
+    input[type=text], input[type=password] { padding: 0 16px; border-radius: 6px; border: 1px solid #ddd; min-height: 44px; }
+    .btn { width: 100%; padding: 12px; margin-top: 12px; background: #28a745; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight:700; }
+    .btn:hover { background: #218838; }
+    .msg { margin-top: 12px; font-weight: 700; text-align:center; }
+    .error { color: #ffdddd; }
+    .success { color: #b2ffb2; }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+  <div class="nav">
+    <div class="brand">Smart Guard</div>
+    <div class="links">
+      <a href="{{ url_for('home') }}">Home</a>
+    </div>
+  </div>
+  <div class="hero">
+    <h1>IOT POWER SPAM DETECTION SYSTEM</h1>
+    <!-- <h4>using machine learning</h4> -->
+  </div>
+
+  <div class="content">
+    <div class="card">
+      <h2>Admin Login</h2>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="adminName">Admin Name</label>
+          <input type="text" id="adminName" placeholder="Enter admin name" required />
+        </div>
+        <div class="form-group">
+          <label for="adminPwd">Password</label>
+          <input type="password" id="adminPwd" placeholder="Enter password" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$" title="Min 8 chars with upper, lower, number and special" />
+        </div>
+        <button type="submit" class="btn" id="loginBtn">Login</button>
+      </form>
+      <div style="margin-top:10px; text-align:center;">
+        <a href="#" id="forgotAdmin" style="color:#ffeb3b; font-weight:700;">Forgot password?</a>
+      </div>
+      <form id="resetAdminForm" style="display:none; margin-top:12px;">
+        <div class="form-group">
+          <label for="resetAdminName">Admin Name</label>
+          <input type="text" id="resetAdminName" placeholder="Enter admin name" required />
+        </div>
+        <div class="form-group">
+          <label for="adminHint">Admin Hint</label>
+          <input type="text" id="adminHint" placeholder="Enter admin hint" required />
+        </div>
+        <div class="form-group">
+          <label for="newAdminPwd">New Password</label>
+          <input type="password" id="newAdminPwd" placeholder="Enter new password" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$" title="Min 8 chars with upper, lower, number and special" />
+        </div>
+        <button type="submit" class="btn">Reset Password</button>
+      </form>
+      <div class="msg" id="msg"></div>
+    </div>
+  </div>
+
+  
+
+  <script>
+    (function(){
+      var nameEl = document.getElementById('adminName');
+      var pwdEl = document.getElementById('adminPwd');
+      var msgEl = document.getElementById('msg');
+      var form = document.getElementById('loginForm');
+      var forgotEl = document.getElementById('forgotAdmin');
+      var resetForm = document.getElementById('resetAdminForm');
+      var resetNameEl = document.getElementById('resetAdminName');
+      var hintEl = document.getElementById('adminHint');
+      var newPwdEl = document.getElementById('newAdminPwd');
+      var strongRe = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{8,}$');
+      function applyPwdValidation(input){
+        var val = (input.value||'');
+        if (strongRe.test(val)) { input.setCustomValidity(''); }
+        else { input.setCustomValidity('Min 8 with upper, lower, number and special'); }
+      }
+      pwdEl.addEventListener('input', function(){ applyPwdValidation(pwdEl); });
+      newPwdEl.addEventListener('input', function(){ applyPwdValidation(newPwdEl); });
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        if (!form.checkValidity()) { form.reportValidity(); return; }
+        var payload = { name: (nameEl.value||'').trim(), password: (pwdEl.value||'').trim() };
+        msgEl.textContent = '';
+        msgEl.className = 'msg';
+        fetch('/api/admin_login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) })
+          .then(function(res){ return res.json().then(function(d){ return {ok:res.ok, d:d}; }); })
+          .then(function(out){
+            if (out.ok){
+              msgEl.textContent = out.d.message || 'Admin login success';
+              msgEl.classList.add('success');
+              window.location.href = '/admin_dashboard';
+            } else {
+              msgEl.textContent = out.d.message || 'Login failed';
+              msgEl.classList.add('error');
+            }
+          })
+          .catch(function(){ msgEl.textContent = 'Network error'; msgEl.classList.add('error'); });
+      });
+      forgotEl.addEventListener('click', function(e){
+        e.preventDefault();
+        if (resetForm.style.display==='none') {
+          if (nameEl && resetNameEl && !resetNameEl.value) { resetNameEl.value = nameEl.value || ''; }
+          resetForm.style.display = 'block';
+        } else {
+          resetForm.style.display = 'none';
+        }
+      });
+      resetForm.addEventListener('submit', function(e){
+        e.preventDefault();
+        applyPwdValidation(newPwdEl);
+        if (!resetForm.checkValidity()) { resetForm.reportValidity(); return; }
+        var payload = { name: (resetNameEl.value||'').trim(), hint: (hintEl.value||'').trim(), newPassword: (newPwdEl.value||'').trim() };
+        msgEl.textContent = '';
+        msgEl.className = 'msg';
+        fetch('/api/admin_reset_password', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) })
+          .then(function(res){ return res.json().then(function(d){ return {ok:res.ok, d:d}; }); })
+          .then(function(out){
+            if (out.ok){
+              msgEl.textContent = out.d.message || 'Password reset successful';
+              msgEl.classList.add('success');
+              resetForm.reset();
+              resetForm.style.display = 'none';
+            } else {
+              msgEl.textContent = out.d.message || 'Reset failed';
+              msgEl.classList.add('error');
+            }
+          })
+          .catch(function(){ msgEl.textContent = 'Network error'; msgEl.classList.add('error'); });
+      });
+    })();
+  </script>
+  
+</body>
+</html>

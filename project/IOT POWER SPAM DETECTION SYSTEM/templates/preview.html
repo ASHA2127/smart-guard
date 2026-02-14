@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Data Preview - Smart Guard</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="../static/img/favicon.png" rel="icon">
+  <link href="../static/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../static/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../static/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="../static/css/styles.css" rel="stylesheet">
+
+  <!-- Custom CSS for Data Preview -->
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+    }
+    .bg { position: fixed; inset: 0; background: linear-gradient(rgba(0,123,255,.25), rgba(0,123,255,.25)), url('{{ bg_url }}') no-repeat center center fixed; background-size: cover; z-index: -1; }
+    .wrap { width: 90%; margin: 16px auto; padding: 16px; background: rgba(0,0,0,.55); border-radius: 10px; color: #fff; }
+    .nav { background: #222; color: #fff; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; font-family: Arial, Helvetica, sans-serif; }
+    .brand { font-weight: 700; }
+    .links a { color: #ccc; margin-left: 20px; text-decoration: none; font-size: 14px; }
+  .links a:hover { color: #fff; }
+    .hero { background:#0a0a0a; color:#fff; text-align:center; padding: 12px 20px; }
+    .hero h1 { margin:0; font-size: 20px; }
+    .hero h4 { margin:0; font-size: 14px; }
+
+    .preview-container {
+      background: transparent;
+      border-radius: 15px;
+      box-shadow: none;
+      margin: 20px auto;
+      padding: 30px;
+      width: 100%;
+    }
+
+    .preview-header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #356faa;
+    }
+
+    .preview-header h2 {
+      color: #ffd54f;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+    .preview-header p {
+      color: #80d8ff !important;
+      font-weight: 700;
+    }
+
+    .data-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .search-box input {
+      border-radius: 25px;
+      border: 2px solid #e9ecef;
+      padding: 10px 20px;
+      transition: all 0.3s ease;
+    }
+
+    .search-box input:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+
+    .entries-control {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .data-table-container {
+      background: transparent;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: transparent;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: none;
+    }
+
+    .data-table th {
+      background: rgba(255,255,255,.9);
+      color: #000;
+      padding: 10px;
+      text-align: left;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .data-table td {
+      padding: 10px;
+      text-align: left;
+      color: #fff;
+      border-bottom: 1px solid rgba(255,255,255,.2);
+      font-size: 13px;
+    }
+
+    .data-table tbody tr:hover {
+      background-color: #f1f3f4;
+    }
+
+    .data-table tbody tr:nth-child(even) {
+      background-color: #f8f9fa;
+    }
+
+    .pagination-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .pagination-info {
+      color: #6c757d;
+      font-size: 14px;
+    }
+
+    .pagination-controls {
+      display: flex;
+      gap: 5px;
+    }
+
+    .pagination-btn {
+      padding: 8px 12px;
+      border: 1px solid #dee2e6;
+      background: white;
+      color: #154676;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .pagination-btn:hover:not(:disabled) {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+    }
+
+    .pagination-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .pagination-btn.active {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+    }
+
+    .action-buttons {
+      text-align: center;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 2px solid #f8f9fa;
+    }
+
+    .btn-custom {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      color: white;
+      padding: 12px 30px;
+      border-radius: 25px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin: 0 10px;
+    }
+
+    .btn-custom:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 15px rgba(102, 126, 234, 0.3);
+      color: white;
+    }
+
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .loading-content {
+      background: white;
+      padding: 40px;
+      border-radius: 15px;
+      text-align: center;
+    }
+
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #667eea;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .navbar {
+      background: rgba(255,255,255,0.95) !important;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    @media (max-width: 768px) {
+      .data-controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .search-box {
+        min-width: 100%;
+      }
+      
+      .pagination-container {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .data-table {
+        font-size: 12px;
+      }
+      
+      .data-table th,
+      .data-table td {
+        padding: 8px 6px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg"></div>
+  <div class="nav">
+    <div class="brand">Smart Guard</div>
+    <div class="links">
+      <a href="{{ url_for('home') }}">Home</a>
+      <a href="{{ url_for('upload1') }}">Upload</a>
+    </div>
+  </div>
+  <div class="hero">
+    <h1>IOT POWER SPAM DETECTION SYSTEM</h1>
+    <!-- <h4>using machine learning</h4> -->
+  </div>
+
+  <!-- Main Content -->
+  <div class="wrap">
+    <div class="preview-container">
+      <div class="preview-header">
+        <h2><i class="bi bi-table"></i> Data Preview</h2>
+        <p class="bi bi-table">Review your uploaded dataset before training the model</p>
+      </div>
+
+      <!-- Data Controls -->
+      <div class="data-controls">
+        <div class="search-box d-flex align-items-center">
+          <input type="text" id="searchInput" class="form-control" placeholder="🔍 Search in data...">
+          <button id="searchButton" class="btn btn-primary ms-2"><i class="bi bi-search"></i> Search</button>
+        </div>
+        <div class="entries-control">
+          <label for="entriesSelect">Show:</label>
+          <select id="entriesSelect" class="form-select" style="width: auto;">
+            <option value="10">10</option>
+            <option value="25" selected>25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+          <span>entries</span>
+        </div>
+        <div>
+          <button class="btn btn-secondary" id="backButton" onclick="window.location.href='{{ url_for('upload1') }}'">
+            <i class="bi bi-arrow-left"></i> Back to Upload
+          </button>
+        </div>
+      </div>
+
+      <!-- Data Table Container -->
+      <div class="data-table-container">
+        <div style="overflow-x: auto; max-height: 600px;">
+          <table class="data-table" id="dataTable">
+            <!-- Table content will be populated by JavaScript -->
+          </table>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination-container">
+        <div class="pagination-info" id="paginationInfo">
+          Showing 0 to 0 of 0 entries
+        </div>
+        <div class="pagination-controls" id="paginationControls">
+          <!-- Pagination buttons will be generated by JavaScript -->
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <button class="btn btn-custom" onclick="trainModel()">
+          <i class="bi bi-cpu"></i> Train Model
+        </button>
+        <!-- <button class="btn btn-custom" onclick="window.location.href='{{ url_for('prediction') }}'">
+          <i class="bi bi-graph-up"></i> Make Prediction
+        </button> -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-content">
+      <div class="spinner"></div>
+      <h4>Training Model...</h4>
+      <p>Please wait while we process your data</p>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('scroll', function(){
+      var bg = document.querySelector('.bg');
+      var y = window.scrollY || 0;
+      if (bg) {
+        bg.style.backgroundPosition = 'center ' + (-y*0.15) + 'px';
+      }
+    });
+    // Data from Flask template
+    const rawData = {{ (records if records is defined else (df_view.to_json(orient='records') if df_view is defined else '[]')) | safe }};
+    let filteredData = [...rawData];
+    let currentPage = 1;
+    let entriesPerPage = 25;
+
+    // Initialize the table
+    document.addEventListener('DOMContentLoaded', function() {
+      renderTable();
+      setupEventListeners();
+    });
+
+    function setupEventListeners() {
+      // Search functionality on input
+      document.getElementById('searchInput').addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        filteredData = rawData.filter(row => 
+          Object.values(row).some(value => 
+            String(value).toLowerCase().includes(searchTerm)
+          )
+        );
+        currentPage = 1;
+        renderTable();
+      });
+
+      // Search functionality on button click
+      document.getElementById('searchButton').addEventListener('click', function() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        filteredData = rawData.filter(row => 
+          Object.values(row).some(value => 
+            String(value).toLowerCase().includes(searchTerm)
+          )
+        );
+        currentPage = 1;
+        renderTable();
+      });
+
+      // Trigger search on Enter key
+      document.getElementById('searchInput').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          document.getElementById('searchButton').click();
+        }
+      });
+
+      // Entries per page
+      document.getElementById('entriesSelect').addEventListener('change', function() {
+        entriesPerPage = parseInt(this.value);
+        currentPage = 1;
+        renderTable();
+      });
+    }
+
+    function renderTable() {
+      const table = document.getElementById('dataTable');
+      const startIndex = (currentPage - 1) * entriesPerPage;
+      const endIndex = startIndex + entriesPerPage;
+      const pageData = filteredData.slice(startIndex, endIndex);
+
+      // Clear table
+      table.innerHTML = '';
+
+      if (filteredData.length === 0) {
+        const headers = rawData.length > 0 ? Object.keys(rawData[0]) : [];
+        if (headers.length > 0) {
+          // Render headers even when no rows match
+          const headerRow = document.createElement('tr');
+          headers.forEach(header => {
+            const th = document.createElement('th');
+            th.textContent = header;
+            headerRow.appendChild(th);
+          });
+          table.appendChild(headerRow);
+
+          const tr = document.createElement('tr');
+          const td = document.createElement('td');
+          td.setAttribute('colspan', headers.length.toString());
+          td.className = 'text-center';
+          td.textContent = 'No rows matched your search';
+          tr.appendChild(td);
+          table.appendChild(tr);
+        } else {
+          table.innerHTML = '<tr><td colspan="100%" class="text-center">No data found</td></tr>';
+        }
+        updatePaginationInfo(true);
+        return;
+      }
+
+      // Create header
+      const headers = Object.keys(filteredData[0]);
+      const headerRow = document.createElement('tr');
+      headers.forEach(header => {
+        const th = document.createElement('th');
+        th.textContent = header;
+        headerRow.appendChild(th);
+      });
+      table.appendChild(headerRow);
+
+      // Create body
+      pageData.forEach(row => {
+        const tr = document.createElement('tr');
+        headers.forEach(header => {
+          const td = document.createElement('td');
+          const value = row[header];
+          td.textContent = value !== null && value !== undefined ? value : '-';
+          tr.appendChild(td);
+        });
+        table.appendChild(tr);
+      });
+
+      updatePaginationInfo();
+      renderPaginationControls();
+    }
+
+    function updatePaginationInfo(isEmpty = false) {
+      const total = filteredData.length;
+      if (isEmpty || total === 0) {
+        document.getElementById('paginationInfo').textContent = 
+          `Showing 0 to 0 of ${total} entries`;
+        return;
+      }
+      const startIndex = (currentPage - 1) * entriesPerPage + 1;
+      const endIndex = Math.min(currentPage * entriesPerPage, total);
+      document.getElementById('paginationInfo').textContent = 
+        `Showing ${startIndex} to ${endIndex} of ${total} entries`;
+    }
+
+    function renderPaginationControls() {
+      const totalPages = Math.ceil(filteredData.length / entriesPerPage);
+      const controls = document.getElementById('paginationControls');
+      controls.innerHTML = '';
+
+      if (totalPages <= 1) return;
+
+      // Previous button
+      const prevBtn = createPaginationButton('Previous', currentPage > 1, () => {
+        if (currentPage > 1) {
+          currentPage--;
+          renderTable();
+        }
+      });
+      controls.appendChild(prevBtn);
+
+      // Page numbers
+      const startPage = Math.max(1, currentPage - 2);
+      const endPage = Math.min(totalPages, currentPage + 2);
+
+      if (startPage > 1) {
+        controls.appendChild(createPaginationButton('1', true, () => goToPage(1)));
+        if (startPage > 2) {
+          controls.appendChild(createPaginationButton('...', false));
+        }
+      }
+
+      for (let i = startPage; i <= endPage; i++) {
+        const btn = createPaginationButton(i.toString(), true, () => goToPage(i));
+        if (i === currentPage) btn.classList.add('active');
+        controls.appendChild(btn);
+      }
+
+      if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+          controls.appendChild(createPaginationButton('...', false));
+        }
+        controls.appendChild(createPaginationButton(totalPages.toString(), true, () => goToPage(totalPages)));
+      }
+
+      // Next button
+      const nextBtn = createPaginationButton('Next', currentPage < totalPages, () => {
+        if (currentPage < totalPages) {
+          currentPage++;
+          renderTable();
+        }
+      });
+      controls.appendChild(nextBtn);
+    }
+
+    function createPaginationButton(text, enabled, onClick) {
+      const btn = document.createElement('button');
+      btn.className = 'pagination-btn';
+      btn.textContent = text;
+      btn.disabled = !enabled;
+      if (enabled && onClick) {
+        btn.addEventListener('click', onClick);
+      }
+      return btn;
+    }
+
+    function goToPage(page) {
+      currentPage = page;
+      renderTable();
+    }
+
+    function trainModel() {
+      document.getElementById('loadingOverlay').style.display = 'flex';
+      setTimeout(() => {
+        document.getElementById('loadingOverlay').style.display = 'none';
+        alert('Model training completed successfully!');
+        window.location.href = "{{ url_for('prediction') }}";
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

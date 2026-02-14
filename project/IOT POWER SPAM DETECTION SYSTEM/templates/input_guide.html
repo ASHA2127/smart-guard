@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Input Guide - IoT Power Consumption</title>
+  <style>
+    html, body { height: 100%; margin: 0; font-family: Arial, Helvetica, sans-serif; }
+    .bg { position: fixed; inset: 0; background: url('{{ bg_url }}') no-repeat center center fixed; background-size: cover; z-index: -1; }
+    .nav { background: #222; color: #fff; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .brand { font-weight: 700; }
+    .links a { color: #ccc; margin-left: 24px; text-decoration: none; font-size: 16px; }
+    .links a:hover { color: #fff; }
+    .hero { background:#0a0a0a; color:#fff; text-align:center; padding: 12px 20px; }
+    .hero h1 { margin:0; font-size: 20px; }
+    .hero h4 { margin:0; font-size: 14px; }
+    .wrap { max-width: 1100px; margin: 16px auto; padding: 16px; background: rgba(0,0,0,.55); border-radius: 10px; color: #fff; }
+    .guide-container { max-width: 1100px; margin: 0 auto; padding: 16px; }
+    .guide-header { text-align: center; margin: 12px 0 16px; }
+    .guide-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    .guide-table th, .guide-table td { padding: 10px; border: 1px solid #dee2e6; }
+    .guide-table th { background-color: rgba(255,255,255,.9); color:#000; font-weight: 700; }
+    .guide-table td { background-color: rgba(0,0,0,.25); }
+    .normal-range { color: #b2ffb2; font-weight: 700; }
+    .spam-range { color: #ffdddd; font-weight: 700; }
+    .back-btn { display:inline-block; margin: 8px 0 12px; padding: 8px 12px; background-color: #007bff; color: white; border: none; border-radius: 6px; text-decoration: none; font-weight:700; }
+    .back-btn:hover { background-color: #0069d9; color: white; }
+    .section { margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+  <div class="nav">
+    <div class="brand">Smart Guard</div>
+    <div class="links">
+      <a href="{{ url_for('home') }}">Home</a>
+      <a href="{{ url_for('prediction') }}">Prediction</a>
+    </div>
+  </div>
+  <div class="hero">
+    <h1>IOT POWER SPAM DETECTION SYSTEM</h1>
+    <!-- <h4>using machine learning</h4> -->
+  </div>
+  <div class="wrap">
+    <div class="guide-container">
+      <a href="/prediction" class="back-btn">Back to Prediction</a>
+      <div class="guide-header">
+        <h2>Input Guide for Power Consumption Values</h2>
+      </div>
+      <div class="section">
+        <h3>Device Inputs</h3>
+        <table class="guide-table">
+          <thead>
+            <tr>
+              <th>Input Field</th>
+              <th>Normal Range</th>
+              <th>Suspicious Range</th>
+              <th>Unit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Generation Resources</td><td class="normal-range">0 - 0.003</td><td class="spam-range">0.004 - 0.006</td><td>kW</td></tr>
+            <tr><td>House Overall</td><td class="normal-range">0 - 0.932</td><td class="spam-range">0.933 - 1.864</td><td>kW</td></tr>
+            <tr><td>Dishwasher</td><td class="normal-range">0 - 0.00003</td><td class="spam-range">0.00004 - 0.0003</td><td>kW</td></tr>
+            <tr><td>Furnace</td><td class="normal-range">0 - 0.021</td><td class="spam-range">0.022 - 0.503</td><td>kW</td></tr>
+            <tr><td>Home Office</td><td class="normal-range">0 - 0.447</td><td class="spam-range">0.448 - 0.894</td><td>kW</td></tr>
+            <tr><td>Fridge</td><td class="normal-range">0 - 0.124</td><td class="spam-range">0.125 - 0.248</td><td>kW</td></tr>
+            <tr><td>Wine Cellar</td><td class="normal-range">0 - 0.011</td><td class="spam-range">0.012 - 0.022</td><td>kW</td></tr>
+            <tr><td>Garage Door</td><td class="normal-range">0 - 0.015</td><td class="spam-range">0.016 - 0.030</td><td>kW</td></tr>
+            <tr><td>Kitchen</td><td class="normal-range">0 - 0.0008</td><td class="spam-range">0.0009 - 0.0016</td><td>kW</td></tr>
+            <tr><td>Barn</td><td class="normal-range">0 - 0.031</td><td class="spam-range">0.032 - 0.062</td><td>kW</td></tr>
+            <tr><td>Well</td><td class="normal-range">0 - 0.001</td><td class="spam-range">0.002 - 0.003</td><td>kW</td></tr>
+            <tr><td>Microwave</td><td class="normal-range">0 - 0.004</td><td class="spam-range">0.005 - 0.008</td><td>kW</td></tr>
+            <tr><td>Living Room</td><td class="normal-range">0 - 0.002</td><td class="spam-range">0.003 - 0.004</td><td>kW</td></tr>
+            <tr><td>Solar</td><td class="normal-range">0 - 0.003</td><td class="spam-range">0.004 - 0.006</td><td>kW</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section">
+        <h3>Environment Features</h3>
+        <table class="guide-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Normal Range</th>
+              <th>Suspicious Range</th>
+              <th>Unit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Temperature</td><td class="normal-range">36.14 - 84.57</td><td class="spam-range">84.58 - 133</td><td>°F</td></tr>
+            <tr><td>Humidity</td><td class="normal-range">0.62 - 0.65</td><td class="spam-range">0.651 - 0.68</td><td>%</td></tr>
+            <tr><td>Visibility</td><td class="normal-range">9.88 - 10</td><td class="spam-range">9.76 - 9.87</td><td>mi</td></tr>
+            <tr><td>Apparent Temperature</td><td class="normal-range">29.26 - 89.73</td><td class="spam-range">89.74 - 150.2</td><td>°F</td></tr>
+            <tr><td>Pressure</td><td class="normal-range">1008.35 - 1016.91</td><td class="spam-range">999.79 - 1008.34</td><td>hPa</td></tr>
+            <tr><td>Wind Speed</td><td class="normal-range">9.18 - 13.82</td><td class="spam-range">13.83 - 18.46</td><td>mph</td></tr>
+            <tr><td>Wind Bearing</td><td class="normal-range">0 - 360</td><td class="spam-range">—</td><td>°</td></tr>
+            <tr><td>Precipitation Intensity</td><td class="normal-range">0 - 1.0</td><td class="spam-range">—</td><td>in/hr</td></tr>
+          </tbody>
+        </table>
+        <p style="margin-top:8px; font-size:13px; color:#ddd;">Note: Wind Bearing and Precipitation Intensity are context features consumed by the model. Their indicative ranges are provided for guidance; the model learns thresholds from data across features.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

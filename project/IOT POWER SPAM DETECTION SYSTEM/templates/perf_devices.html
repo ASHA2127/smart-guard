@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Smart Guard Device Details</title>
+  <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../static/css/styles.css" rel="stylesheet">
+  <style>
+    html, body { height: 100%; margin: 0; font-family: Arial, Helvetica, sans-serif; }
+    .bg { position: fixed; inset: 0; background: url('{{ bg_url }}') no-repeat center center fixed; background-size: cover; z-index: -1; }
+    .nav { background: #222; color: #fff; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .brand { font-weight: 700; }
+    .links a { color: #ccc; margin-left: 24px; text-decoration: none; font-size: 16px; }
+    .links a:hover { color: #fff; }
+    .hero { background:#0a0a0a; color:#fff; text-align:center; padding: 12px 20px; }
+    .hero h1 { margin:0; font-size: 20px; }
+    .wrap { max-width: 1100px; margin: 16px auto; padding: 16px; background: rgba(0,0,0,.55); border-radius: 10px; color: #fff; }
+    .heading { color:#4caf75; text-transform: uppercase; text-align:center; font-size: 22px; font-weight:700; margin-bottom: 8px; }
+    .metrics table { width: 100%; border-collapse: collapse; }
+    .metrics thead th { color:#ffeb3b; font-weight:700; padding:10px; }
+    .metrics tbody td { padding:10px; border-bottom:1px solid rgba(255,255,255,.2); color:#fff; vertical-align: top; }
+    .devices-cell { max-height: 200px; overflow-y: auto; }
+    .device-tags { display:flex; flex-wrap:wrap; gap:6px; }
+    .tag { background: rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.25); color:#ffeb3b; padding:4px 8px; border-radius:999px; font-size:12px; white-space:nowrap; }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+  <div class="nav">
+    <div class="brand">Smart Guard</div>
+    <div class="links">
+      <a href="{{ url_for('home') }}">Home</a>
+      <a href="{{ url_for('performance') }}">Performance</a>
+    </div>
+  </div>
+  <div class="hero"><h1>IOT POWER SPAM DETECTION SYSTEM</h1></div>
+  <section class="services">
+    <div class="wrap metrics">
+      <div class="heading">Confusion Matrix Devices</div>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Count</th>
+            <th>Devices</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>TN</strong></td>
+            <td>{{ feat_cm_tn }}</td>
+            <td class="devices-cell"><div class="device-tags">{% for d in feat_tn_devices %}<span class="tag">{{ d }}</span>{% endfor %}{% if not feat_tn_devices %}-{% endif %}</div></td>
+          </tr>
+          <tr>
+            <td><strong>FP</strong></td>
+            <td>{{ feat_cm_fp }}</td>
+            <td class="devices-cell"><div class="device-tags">{% for d in feat_fp_devices %}<span class="tag">{{ d }}</span>{% endfor %}{% if not feat_fp_devices %}-{% endif %}</div></td>
+          </tr>
+          <tr>
+            <td><strong>FN</strong></td>
+            <td>{{ feat_cm_fn }}</td>
+            <td class="devices-cell"><div class="device-tags">{% for d in feat_fn_devices %}<span class="tag">{{ d }}</span>{% endfor %}{% if not feat_fn_devices %}-{% endif %}</div></td>
+          </tr>
+          <tr>
+            <td><strong>TP</strong></td>
+            <td>{{ feat_cm_tp }}</td>
+            <td class="devices-cell"><div class="device-tags">{% for d in feat_tp_devices %}<span class="tag">{{ d }}</span>{% endfor %}{% if not feat_tp_devices %}-{% endif %}</div></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="heading">Device Spam Summary</div>
+      <table class="table table-bordered">
+        <tr>
+          <td><strong>Predicted Spam devices</strong></td>
+          <td class="devices-cell"><div class="device-tags">{% for d in feat_pred_spam_devices %}<span class="tag">{{ d }}</span>{% endfor %}{% if not feat_pred_spam_devices %}-{% endif %}</div></td>
+        </tr>
+        <tr>
+          <td><strong>Predicted Normal devices</strong></td>
+          <td class="devices-cell"><div class="device-tags">{% for d in feat_pred_normal_devices %}<span class="tag">{{ d }}</span>{% endfor %}{% if not feat_pred_normal_devices %}-{% endif %}</div></td>
+        </tr>
+        <tr>
+          <td><strong>Actual Spam devices</strong></td>
+          <td class="devices-cell"><div class="device-tags">{% for d in feat_actual_spam_devices %}<span class="tag">{{ d }}</span>{% endfor %}{% if not feat_actual_spam_devices %}-{% endif %}</div></td>
+        </tr>
+        <tr>
+          <td><strong>Actual Normal devices</strong></td>
+          <td class="devices-cell"><div class="device-tags">{% for d in feat_actual_normal_devices %}<span class="tag">{{ d }}</span>{% endfor %}{% if not feat_actual_normal_devices %}-{% endif %}</div></td>
+        </tr>
+      </table>
+    </div>
+  </section>
+  <script src="../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

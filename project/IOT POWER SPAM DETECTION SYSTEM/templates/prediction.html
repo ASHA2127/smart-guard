@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Smart Guard Prediction</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="../static/img/favicon.png" rel="icon">
+  <link href="../static/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../static/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../static/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+
+  <style>
+    html, body { height: 100%; margin: 0; font-family: Arial, Helvetica, sans-serif; }
+    .bg { position: fixed; inset: 0; background: linear-gradient(rgba(10,10,10,0.6), rgba(10,10,10,0.6)), url('{{ bg_url }}') no-repeat center center fixed; background-size: cover; z-index: -1; }
+    .nav { background: #1f1f1f; color: #fff; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .brand { font-weight: 700; letter-spacing: 0.3px; }
+    .links a { color: #ccc; margin-left: 24px; text-decoration: none; font-size: 16px; }
+    .links a:hover { color: #fff; }
+    .hero { background:#0a0a0a; color:#fff; text-align:center; padding: 16px 20px; }
+    .hero h1 { margin:0; font-size: 22px; }
+    .hero h4 { margin:4px 0 0; font-size: 14px; opacity: .9; }
+    .wrap { max-width: 1100px; margin: 16px auto; padding: 20px; background: rgba(22,22,22,.55); border: 1px solid rgba(255,255,255,.12); border-radius: 14px; color: #fff; box-shadow: 0 12px 24px rgba(0,0,0,.25); }
+    .section-title { display:flex; align-items:center; gap:10px; font-weight: 800; font-size: 18px; color:#fff; margin: 0 0 12px; }
+    .section-title i { color:#ffc107; }
+    .toolbar { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom: 8px; }
+    .group-card { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); border-radius: 12px; padding: 12px; margin-top: 10px; }
+    .group-card h3 { margin: 0 0 10px; font-size: 16px; letter-spacing: .2px; font-weight: 700; color:#ffeb3b; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; }
+    .input-group-custom { background: rgba(255,255,255,.95); border: 1px solid #e8e8e8; border-radius: 12px; padding: 12px; color:#000; box-shadow: 0 6px 16px rgba(0,0,0,.1); transition: box-shadow .2s ease, transform .2s ease; }
+    .input-group-custom.device { border-left: 4px solid #4dabf7; }
+    .input-group-custom.env { border-left: 4px solid #34c759; }
+    .input-group-custom:hover { box-shadow: 0 10px 20px rgba(0,0,0,.12); transform: translateY(-1px); }
+    .input-label { font-weight:700; margin-bottom:6px; font-size:13.5px; color:#222; display:flex; align-items:center; gap:6px; }
+    .input-group-custom.device .label-icon { color:#2196f3; }
+    .input-group-custom.env .label-icon { color:#34c759; }
+    .label-actions .info-badge { display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:#f0f4ff; border:1px solid #d0d7de; color:#0b5394; }
+    .label-actions .info-badge:hover { background:#e8f0ff; }
+    .input-container { display:flex; align-items:center; gap:10px; }
+    .form-input { flex:1; height: 42px; padding:10px 12px; border:1.5px solid #d0d7de; border-radius:10px; font-size:14px; line-height: 20px; }
+    .form-input::placeholder { color:#8a94a6; }
+    .form-input:focus { outline: none; border-color: #007bff; box-shadow: 0 0 0 3px rgba(0,123,255,.15); background: #fff; }
+    .arrow-controls { display:flex; gap:6px; }
+    .arrow-btn { background:#f6f8fa; color:#333; border:1px solid #d0d7de; border-radius:8px; padding:6px 10px; font-weight:700; cursor:pointer; }
+    .arrow-btn:hover { background:#eef2f6; }
+    .input-group-custom.device .arrow-controls::before { content: 'kW'; display:inline-flex; align-items:center; background:#eaf2fb; color:#0b5394; border:1px solid #d0d7de; border-radius:8px; padding:6px 8px; font-weight:700; font-size:12px; }
+    .toggle-btn { background:#2e2e2e; color:#fff; border:1px solid #3a3a3a; border-radius:20px; padding:6px 12px; font-weight:700; font-size:12px; }
+    .wrap.compact .form-grid { gap:8px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+    .wrap.compact .input-group-custom { padding:8px; border-radius:10px; }
+    .wrap.compact .form-input { height:36px; font-size:13px; }
+    .submit-section { display:flex; justify-content:flex-end; gap:10px; margin-top: 14px; }
+    .submit-btn { background: linear-gradient(90deg, #007bff, #00b4d8); color:#fff; border:none; border-radius:8px; padding:10px 18px; font-weight:700; box-shadow: 0 8px 16px rgba(0,123,255,.25); }
+    .reset-btn { background: #444; color:#fff; border:none; border-radius:8px; padding:10px 16px; font-weight:700; }
+    .prediction-result { margin-top:14px; padding:14px; background: rgba(255,255,255,.95); border: 1px solid #e8e8e8; border-radius:10px; color:#000; text-align:center; font-weight:700; box-shadow: 0 10px 18px rgba(0,0,0,.08); }
+
+    input[type=number]::-webkit-outer-spin-button,
+    input[type=number]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg"></div>
+  <div class="nav">
+    <div class="brand">Smart Guard</div>
+    <div class="links">
+      <a href="{{ url_for('home') }}">Home</a>
+      <a href="{{ url_for('preview') }}">Preview</a>
+      <a href="{{ url_for('input_guide') }}">Input Guide</a>
+    </div>
+  </div>
+  <div class="hero">
+    <h1>IOT POWER SPAM DETECTION SYSTEM</h1>
+    <!-- <h4>using machine learning</h4> -->
+  </div>
+
+  <div class="wrap">
+      <!-- Prediction Form -->
+      <form action="{{ url_for('predict') }}" method="POST">
+        <div class="toolbar">
+          <div class="section-title"><i class="bi bi-lightning"></i> Enter Readings for Prediction</div>
+          <button type="button" class="toggle-btn" onclick="toggleCompact(this)"><i class="bi bi-arrows-collapse"></i> Compact Mode</button>
+        </div>
+
+        <div class="group-card">
+          <h3><i class="bi bi-hdd-network"></i> Device Inputs</h3>
+          <div class="form-grid">
+          <!-- Generation -->
+          <div class="input-group-custom device">
+            <label class="input-label"><span class="label-icon"><i class="bi bi-lightning-charge"></i></span> Generation Resources [kW] <span class="label-actions"><a class="info-badge" href="{{ url_for('input_guide') }}" target="_blank" title="See Input Guide"><i class="bi bi-info-circle"></i></a></span></label>
+            <div class="input-container">
+              <input type="number" step="any" name="generation" class="form-input" placeholder="0.003" required>
+              <div class="arrow-controls">
+                <button type="button" class="arrow-btn up" onclick="setValue(this, 6.357)">↑</button>
+                <button type="button" class="arrow-btn down" onclick="setValue(this, 0.003)">↓</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- House Overall -->
+          <div class="input-group-custom device">
+            <label class="input-label"><span class="label-icon"><i class="bi bi-house-door"></i></span> House Overall [kW] <span class="label-actions"><a class="info-badge" href="{{ url_for('input_guide') }}" target="_blank" title="See Input Guide"><i class="bi bi-info-circle"></i></a></span></label>
+            <div class="input-container">
+              <input type="number" step="any" name="House overall" class="form-input" placeholder="0.932" required>
+              <div class="arrow-controls">
+                <button type="button" class="arrow-btn up" onclick="setValue(this, 6.357)">↑</button>
+                <button type="button" class="arrow-btn down" onclick="setValue(this, 0.932)">↓</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dishwasher -->
+          <div class="input-group-custom device">
+            <label class="input-label"><span class="label-icon"><i class="bi bi-droplet"></i></span> Dishwasher [kW] <span class="label-actions"><a class="info-badge" href="{{ url_for('input_guide') }}" target="_blank" title="See Input Guide"><i class="bi bi-info-circle"></i></a></span></label>
+            <div class="input-container">
+              <input type="number" step="any" name="Dishwasher" class="form-input" placeholder="0.0001" required>
+              <div class="arrow-controls">
+                <button type="button" class="arrow-btn up" onclick="setValue(this, 0.0003)">↑</button>
+                <button type="button" class="arrow-btn down" onclick="setValue(this, 0.00003)">↓</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Furnace -->
+          <div class="input-group-custom device">
+            <label class="input-label"><span class="label-icon"><i class="bi bi-thermometer"></i></span> Furnace [kW] <span class="label-actions"><a class="info-badge" href="{{ url_for('input_guide') }}" target="_blank" title="See Input Guide"><i class="bi bi-info-circle"></i></a></span></label>
+            <div class="input-container">
+              <input type="number" step="any" name="Furnace" class="form-input" placeholder="0.021" required>
+              <div class="arrow-controls">
+                <button type="button" class="arrow-btn up" onclick="setValue(this, 0.503)">↑</button>
+                <button type="button" class="arrow-btn down" onclick="setValue(this, 0.021)">↓</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Home Office -->
+          <div class="input-group-custom device">
+            <label class="input-label"><span class="label-icon"><i class="bi bi-laptop"></i></span> Home Office [kW] <span class="label-actions"><a class="info-badge" href="{{ url_for('input_guide') }}" target="_blank" title="See Input Guide"><i class="bi bi-info-circle"></i></a></span></label>
+            <div class="input-container">
+              <input type="number" step="any" name="Home office" class="form-input" placeholder="0.443" required>
+              <div class="arrow-controls">
+                <button type="button" class="arrow-btn up" onclick="setValue(this, 0.447)">↑</button>
+                <button type="button" class="arrow-btn down" onclick="setValue(this, 0.071)">↓</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fridge -->
+          <div class="input-group-custom device">
+            <label class="input-label"><span class="label-icon"><i class="bi bi-snow"></i></span> Fridge [kW] <span class="label-actions"><a class="info-badge" href="{{ url_for('input_guide') }}" target="_blank" title="See Input Guide"><i class="bi bi-info-circle"></i></a></span></label>
+            <div class="input-container">
+              <input type="number" step="any" name="Fridge" class="form-input" placeholder="0.124" required>
+              <div class="arrow-controls">
+                <button type="button" class="arrow-btn up" onclick="setValue(this, 0.124)">↑</button>
+                <button type="button" class="arrow-btn down" onclick="setValue(this, 0.005)">↓</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Wine Cellar -->
+          <div class="input-group-custom device">
+            <label class="input-label"><span class="label-icon"><i class="bi bi-box-seam"></i></span> Wine Cellar [kW] <span class="label-actions"><a class="info-badge" href="{{ url_for('input_guide') }}" target="_blank" title="See Input Guide"><i class="bi bi-info-circle"></i></a></span></label>
+            <div class="input-container">
+              <input type="number" step="any" name="Wine cellar" class="form-input" placeholder="0.007" required>
+              <div class="arrow-controls">
+                <button type="button" class="arrow-btn up" onclick="setValue(this, 0.011)">↑</button>
+                <button type="button" class="arrow-btn down" onclick="setValue(this, 0.007)">↓</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Garage Door -->
+          <div class="input-group-custom device">
+            <label class="input-label"><span class="label-icon"><i class="bi bi-door-open"></i></span> Garage Door [kW] <span class="label-actions"><a class="info-badge" href="{{ url_for('input_guide') }}" target="_blank" title="See Input Guide"><i class="bi bi-info-circle"></i></a></span></label>
+            <div class="input-container">
+              <input type="number" step="any" name="Garage door" class="form-input" placeholder="0.013" required>
+              <div class="arrow-controls">
+                <button type="button" class="arrow-btn up" onclick="setValue(this, 0.015)">↑</button>
+                <button type="button" class="arrow-btn down" onclick="setValue(this, 0.013)">↓</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kitchen -->
+          <div class="input-group-custom device">
+            <label class="input-label"><span class="label-icon"><i class="bi bi-cup-hot"></i></span> Kitchen [kW] <span class="label-actions"><a class="info-badge" href="{{ url_for('input_guide') }}" target="_blank" title="See Input Guide"><i class="bi bi-info-circle"></i></a></span></label>
+            <div class="input-container">
+              <input type="number" step="any" name="Kitchen" class="form-input" placeholder="0.0004" required>
+              <div class="arrow-controls">
+                <button type="button" class="arrow-btn up" onclick="setValue(this, 0.0008)">↑</button>
+                <button type="button" class="arrow-btn down" onclick="setValue(this, 0.0004)">↓</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Barn -->
+          <div class="input-group-custom device">
+            <label class="input-label"><span class="label-icon"><i class="bi bi-building"></i></span> Barn [kW] <span class="label-actions"><a class="info-badge" href="{{ url_for('input_guide') }}" target="_blank" title="See Input Guide"><i class="bi bi-info-circle"></i></a></span></label>
+            <div class="input-container">
+              <input type="number" step="any" name="Barn" class="form-input" placeholder="0.031" required>
+              <div class="arrow-controls">
+                <button type="button" class="arrow-btn up" onclick="setValue(this, 0.031)">↑</button>
+                <button type="button" class="arrow-btn down" onclick="setValue(this, 0.031)">↓</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Well -->
+          <div class="input-group-custom device">
+            <label class="input-label"><span class="label-icon"><i class="bi bi-droplet"></i></span> Well [kW] <span class="label-actions"><a class="info-badge" href="{{ url_for('input_guide') }}" target="_blank" title="See Input Guide"><i class="bi bi-info-circle"></i></a></span></label>
+            <div class="input-container">
+              <input type="number" step="any" name="Well" class="form-input" placeholder="0.001" required>
+              <div class="arrow-controls">
+                <button type="button" class="arrow-btn up" onclick="setValue(this, 0.001)">↑</button>
+                <button type="button" class="arrow-btn down" onclick="setValue(this, 0.001)">↓</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Microwave -->
+          <div class="input-group-custom device">
+            <label class="input-label"><span class="label-icon"><i class="bi bi-tv"></i></span> Microwave [kW] <span class="label-actions"><a class="info-badge" href="{{ url_for('input_guide') }}" target="_blank" title="See Input Guide"><i class="bi bi-info-circle"></i></a></span></label>
+            <div class="input-container">
+              <input type="number" step="any" name="Microwave" class="form-input" placeholder="0.004" required>
+              <div class="arrow-controls">
+                <button type="button" class="arrow-btn up" onclick="setValue(this, 0.004)">↑</button>
+                <button type="button" class="arrow-btn down" onclick="setValue(this, 0.004)">↓</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Living Room -->
+          <div class="input-group-custom device">
+            <label class="input-label"><span class="label-icon"><i class="bi bi-house"></i></span> Living Room [kW] <span class="label-actions"><a class="info-badge" href="{{ url_for('input_guide') }}" target="_blank" title="See Input Guide"><i class="bi bi-info-circle"></i></a></span></label>
+            <div class="input-container">
+              <input type="number" step="any" name="Living room" class="form-input" placeholder="0.002" required>
+              <div class="arrow-controls">
+                <button type="button" class="arrow-btn up" onclick="setValue(this, 0.002)">↑</button>
+                <button type="button" class="arrow-btn down" onclick="setValue(this, 0.002)">↓</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Solar -->
+          <div class="input-group-custom device">
+            <label class="input-label"><span class="label-icon"><i class="bi bi-sun"></i></span> Solar [kW] <span class="label-actions"><a class="info-badge" href="{{ url_for('input_guide') }}" target="_blank" title="See Input Guide"><i class="bi bi-info-circle"></i></a></span></label>
+            <div class="input-container">
+              <input type="number" step="any" name="Solar" class="form-input" placeholder="0.003" required>
+              <div class="arrow-controls">
+                <button type="button" class="arrow-btn up" onclick="setValue(this, 0.003)">↑</button>
+                <button type="button" class="arrow-btn down" onclick="setValue(this, 0.003)">↓</button>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+
+        <div class="group-card">
+          <h3><i class="bi bi-cloud-sun"></i> Environment Features</h3>
+          <div class="form-grid">
+            <!-- Temperature -->
+            <div class="input-group-custom env">
+              <label class="input-label"><span class="label-icon"><i class="bi bi-thermometer-half"></i></span> Temperature <span class="label-actions"><a class="info-badge" href="{{ url_for('input_guide') }}" target="_blank" title="See Input Guide"><i class="bi bi-info-circle"></i></a></span></label>
+              <div class="input-container">
+                <input type="number" step="any" name="temperature" class="form-input" placeholder="29.26" required>
+                <div class="arrow-controls">
+                  <button type="button" class="arrow-btn up" onclick="setValue(this, 84.57)">↑</button>
+                  <button type="button" class="arrow-btn down" onclick="setValue(this, 36.14)">↓</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Humidity -->
+            <div class="input-group-custom env">
+              <label class="input-label"><span class="label-icon"><i class="bi bi-droplet"></i></span> Humidity <span class="label-actions"><a class="info-badge" href="{{ url_for('input_guide') }}" target="_blank" title="See Input Guide"><i class="bi bi-info-circle"></i></a></span></label>
+              <div class="input-container">
+                <input type="number" step="any" name="humidity" class="form-input" placeholder="0.62" required>
+                <div class="arrow-controls">
+                  <button type="button" class="arrow-btn up" onclick="setValue(this, 0.65)">↑</button>
+                  <button type="button" class="arrow-btn down" onclick="setValue(this, 0.62)">↓</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Visibility -->
+            <div class="input-group-custom env">
+              <label class="input-label"><span class="label-icon"><i class="bi bi-eye"></i></span> Visibility <span class="label-actions"><a class="info-badge" href="{{ url_for('input_guide') }}" target="_blank" title="See Input Guide"><i class="bi bi-info-circle"></i></a></span></label>
+              <div class="input-container">
+                <input type="number" step="any" name="visibility" class="form-input" placeholder="10" required>
+                <div class="arrow-controls">
+                  <button type="button" class="arrow-btn up" onclick="setValue(this, 9.88)">↑</button>
+                  <button type="button" class="arrow-btn down" onclick="setValue(this, 10)">↓</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Apparent Temperature -->
+            <div class="input-group-custom env">
+              <label class="input-label"><span class="label-icon"><i class="bi bi-brightness-high"></i></span> Apparent Temperature <span class="label-actions"><a class="info-badge" href="{{ url_for('input_guide') }}" target="_blank" title="See Input Guide"><i class="bi bi-info-circle"></i></a></span></label>
+              <div class="input-container">
+                <input type="number" step="any" name="apparentTemperature" class="form-input" placeholder="29.26" required>
+                <div class="arrow-controls">
+                  <button type="button" class="arrow-btn up" onclick="setValue(this, 89.73)">↑</button>
+                  <button type="button" class="arrow-btn down" onclick="setValue(this, 29.26)">↓</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pressure -->
+            <div class="input-group-custom env">
+              <label class="input-label"><span class="label-icon"><i class="bi bi-speedometer"></i></span> Pressure <span class="label-actions"><a class="info-badge" href="{{ url_for('input_guide') }}" target="_blank" title="See Input Guide"><i class="bi bi-info-circle"></i></a></span></label>
+              <div class="input-container">
+                <input type="number" step="any" name="pressure" class="form-input" placeholder="1016.91" required>
+                <div class="arrow-controls">
+                  <button type="button" class="arrow-btn up" onclick="setValue(this, 1008.35)">↑</button>
+                  <button type="button" class="arrow-btn down" onclick="setValue(this, 1016.91)">↓</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Wind Speed -->
+            <div class="input-group-custom env">
+              <label class="input-label"><span class="label-icon"><i class="bi bi-wind"></i></span> Wind Speed <span class="label-actions"><a class="info-badge" href="{{ url_for('input_guide') }}" target="_blank" title="See Input Guide"><i class="bi bi-info-circle"></i></a></span></label>
+              <div class="input-container">
+                <input type="number" step="any" name="windSpeed" class="form-input" placeholder="9.18" required>
+                <div class="arrow-controls">
+                  <button type="button" class="arrow-btn up" onclick="setValue(this, 13.82)">↑</button>
+                  <button type="button" class="arrow-btn down" onclick="setValue(this, 9.18)">↓</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Wind Bearing -->
+            <div class="input-group-custom env">
+              <label class="input-label"><span class="label-icon"><i class="bi bi-compass"></i></span> Wind Bearing <span class="label-actions"><a class="info-badge" href="{{ url_for('input_guide') }}" target="_blank" title="See Input Guide"><i class="bi bi-info-circle"></i></a></span></label>
+              <div class="input-container">
+                <input type="number" step="any" name="windBearing" class="form-input" placeholder="282" required>
+                <div class="arrow-controls">
+                  <button type="button" class="arrow-btn up" onclick="setValue(this, 182)">↑</button>
+                  <button type="button" class="arrow-btn down" onclick="setValue(this, 282)">↓</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Precipitation Intensity -->
+            <div class="input-group-custom env">
+              <label class="input-label"><span class="label-icon"><i class="bi bi-cloud-rain"></i></span> Precipitation Intensity <span class="label-actions"><a class="info-badge" href="{{ url_for('input_guide') }}" target="_blank" title="See Input Guide"><i class="bi bi-info-circle"></i></a></span></label>
+              <div class="input-container">
+                <input type="number" step="any" name="precipIntensity" class="form-input" placeholder="0" required>
+                <div class="arrow-controls">
+                  <button type="button" class="arrow-btn up" onclick="setValue(this, 0)">↑</button>
+                  <button type="button" class="arrow-btn down" onclick="setValue(this, 0)">↓</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Section -->
+        <div class="submit-section">
+          <button type="button" class="reset-btn" onclick="document.querySelector('form').reset()">
+            <i class="bi bi-arrow-counterclockwise"></i> Reset
+          </button>
+          <button type="submit" class="submit-btn">
+            <i class="bi bi-cpu"></i> Predict Spam Detection
+          </button>
+        </div>
+      </form>
+
+      <!-- Prediction Result -->
+      {% if prediction_text %}
+      <div class="prediction-result {{ 'spam' if 'spam' in prediction_text.lower() else 'normal' }}">
+        <i class="bi bi-{{ 'exclamation-triangle' if 'spam' in prediction_text.lower() else 'check-circle' }}"></i>
+        Prediction Result: {{ prediction_text }}
+      </div>
+      {% endif %}
+
+      
+  </div>
+
+  
+  <script>
+    document.addEventListener('scroll', function(){
+      var bg = document.querySelector('.bg');
+      var y = window.scrollY || 0;
+      if (bg) {
+        bg.style.backgroundPosition = 'center ' + (-y*0.2) + 'px';
+      }
+    });
+    function toggleCompact(btn) {
+      const wrap = document.querySelector('.wrap');
+      if (!wrap) return;
+      const isCompacting = !wrap.classList.contains('compact');
+      wrap.classList.toggle('compact');
+      btn.innerHTML = isCompacting
+        ? '<i class="bi bi-arrows-expand"></i> Comfortable Mode'
+        : '<i class="bi bi-arrows-collapse"></i> Compact Mode';
+    }
+
+    // Initialize toggle button label based on current state
+    document.addEventListener('DOMContentLoaded', function(){
+      const wrap = document.querySelector('.wrap');
+      const btn = document.querySelector('.toggle-btn');
+      if (wrap && btn) {
+        const isCompact = wrap.classList.contains('compact');
+        btn.innerHTML = isCompact
+          ? '<i class="bi bi-arrows-expand"></i> Comfortable Mode'
+          : '<i class="bi bi-arrows-collapse"></i> Compact Mode';
+      }
+    });
+    const valueSamples = {{ (value_samples or {}) | tojson | safe }};
+    const valueSamplesNormal = {{ (value_samples_normal or {}) | tojson | safe }};
+    const valueSamplesSpam = {{ (value_samples_spam or {}) | tojson | safe }};
+    const valueIndexUp = {};
+    const valueIndexDown = {};
+
+    function setValue(button, fallbackValue) {
+      const input = button.closest('.input-container').querySelector('.form-input');
+      const name = input.getAttribute('name');
+      const isUp = button.classList.contains('up');
+      const arrSpam = (valueSamplesSpam && valueSamplesSpam[name] && valueSamplesSpam[name].length) ? valueSamplesSpam[name] : null;
+      const arrNorm = (valueSamplesNormal && valueSamplesNormal[name] && valueSamplesNormal[name].length) ? valueSamplesNormal[name] : null;
+      if ((isUp && arrSpam && arrSpam.length) || (!isUp && arrNorm && arrNorm.length)) {
+        const base = isUp ? arrSpam : arrNorm;
+        const arr = isUp ? base.slice().reverse() : base;
+        const idxMap = isUp ? valueIndexUp : valueIndexDown;
+        if (idxMap[name] === undefined) idxMap[name] = 0;
+        input.value = arr[idxMap[name]];
+        idxMap[name] = (idxMap[name] + 1) % arr.length;
+        input.style.background = isUp ? '#ffe8e8' : '#e8f5ff';
+        setTimeout(() => { input.style.background = ''; }, 500);
+      } else {
+        input.style.background = '#f0f0f0';
+        setTimeout(() => { input.style.background = ''; }, 300);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function(){
+      document.querySelectorAll('.input-container').forEach(container => {
+        const input = container.querySelector('.form-input');
+        if (!input) return;
+        const name = input.getAttribute('name');
+        const hasSpam = !!(valueSamplesSpam && valueSamplesSpam[name] && valueSamplesSpam[name].length);
+        const hasNorm = !!(valueSamplesNormal && valueSamplesNormal[name] && valueSamplesNormal[name].length);
+        const upBtn = container.querySelector('.arrow-btn.up');
+        const downBtn = container.querySelector('.arrow-btn.down');
+        if (upBtn) {
+          upBtn.disabled = !hasSpam;
+          if (!hasSpam) upBtn.title = 'No spam samples in CSV';
+        }
+        if (downBtn) {
+          downBtn.disabled = !hasNorm;
+          if (!hasNorm) downBtn.title = 'No normal samples in CSV';
+        }
+      });
+    });
+
+    document.querySelector('form').addEventListener('submit', function() {
+      const submitBtn = document.querySelector('.submit-btn');
+      submitBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Processing...';
+      submitBtn.disabled = true;
+    });
+  </script>
+</body>
+
+</html>

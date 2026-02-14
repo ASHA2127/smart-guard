@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Abstract</title>
+  <style>
+    :root { --nav-bg:#222; --nav-fg:#fff; --muted:#666; --accent:#0d4b85; }
+    html, body { margin:0; padding:0; font-family: Arial, Helvetica, sans-serif; color: #fff; background: url('{{ bg_url }}') center/cover fixed no-repeat; }
+    .nav { background: var(--nav-bg); color: var(--nav-fg); padding: 16px 24px; display:flex; align-items:center; justify-content:space-between; }
+    .brand { font-weight:700; }
+    .links a { color:#ccc; margin-left:24px; text-decoration:none; font-size:16px; }
+    .links a:hover { color:#fff; }
+    .hero { background:#0a0a0a; color:#fff; text-align:center; padding: 12px 20px; }
+    .hero h1 { margin:0; font-size: 20px; }
+    .hero h4 { margin:0; font-size: 14px; }
+    .wrap { max-width: 980px; margin: 20px auto; padding: 30px 20px; background: rgba(0,0,0,.45); border-radius: 10px; }
+    .section-title { text-align:center; margin-bottom: 20px; }
+    .section-title h2 { margin:0; font-size: 16px; font-weight: 700; text-transform: uppercase; }
+    .heading-box { display:inline-block; background: rgba(255,255,255,.85); color:#000; font-weight:700; padding:8px 12px; border-radius:6px; }
+    .heading-sm { font-size:18px; }
+    .card { background: transparent; border: none; border-radius:8px; padding:18px; margin-bottom:14px; box-shadow:none; }
+    .card h3 { margin:0 0 10px; font-size: 16px; text-transform: uppercase; }
+    .card p { margin:6px 0; line-height:1.7; color: #fff; font-weight: 700; text-align: left; }
+    .grid { display:grid; grid-template-columns: 1fr; gap:18px; }
+    @media (min-width: 860px) { .grid { grid-template-columns: 1fr 1fr; } }
+    .features { display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+    .feat { background:#f7f9fc; border:1px solid #e7edf5; border-radius:6px; padding:12px; }
+    .muted { color: #fff; font-size: 13px; font-weight: 700; }
+    .footer { text-align:center; padding: 18px 10px; font-size: 13px; color: var(--muted); }
+    .reveal { opacity:0; transform: translateY(12px); transition: all .5s ease; }
+    .reveal.show { opacity:1; transform: none; }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <div class="brand">Smart Guard</div>
+    <div class="links">
+      <a href="{{ url_for('home') }}">Home</a>
+    </div>
+  </div>
+  <div class="hero">
+    <h1>IOT POWER SPAM DETECTION SYSTEM</h1>
+    <!-- <h4>using machine learning</h4> -->
+  </div>
+  <div class="wrap">
+    <div class="section-title reveal"><h2><span class="heading-box">Abstract</span></h2></div>
+    <div class="card reveal">
+      <p>The Internet of Things (IoT) is a group of millions
+of devices having sensors and actuators linked over wired or
+wireless channel for data transmission. IoT has grown rapidly
+over the past decade with more than 25 billion devices are
+expected to be connected by 2020. The volume of data released
+from these devices will increase many-fold in the years to come. In
+addition to an increased volume, the IoT devices produces a large
+amount of data with a number of different modalities having
+varying data quality defined by its speed in terms of time and
+position dependency. In such an environment, machine learning
+algorithms can play an important role in ensuring security and
+authorization based on biotechnology, anomalous detection to
+improve the usability and security of IoT systems. On the other
+hand, attackers often view learning algorithms to exploit the
+vulnerabilities in smart IoT-based systems. Motivated from these,
+in this paper, we propose the security of the IoT devices by
+detecting spam using machine learning. To achieve this objective,
+Spam Detection in IoT using Machine Learning framework is
+proposed. In this framework, five machine learning models are
+evaluated using various metrics with a large collection of inputs
+features sets. Each model computes a spam score by considering
+the refined input features. This score depicts the trustworthiness
+of IoT device under various parameters. REFIT Smart Home
+dataset is used for the validation of proposed technique. The
+results obtained proves the effectiveness of the proposed scheme
+in comparison to the other existing schemes</p>
+    </div>
+
+    <div class="grid">
+      <div class="card reveal">
+        <h3><span class="heading-box heading-sm">Challenges</span></h3>
+        <p>High-velocity, multi-modal IoT power data and adversarial attacks lead to inconsistent readings and security risks.</p>
+      </div>
+      <div class="card reveal">
+        <h3><span class="heading-box heading-sm">Solution</span></h3>
+        <p>Evaluate multiple ML models to score spam vs. normal activity using curated power and environment features.</p>
+      </div>
+    </div>
+    <div class="card reveal">
+      <h3><span class="heading-box heading-sm">Validation</span></h3>
+      <p>REFIT Smart Guard data validates precision and recall for spam detection and normal behavior classification.</p>
+    </div>
+  </div>
+
+  <script>
+    function revealOnScroll(){
+      var els = document.querySelectorAll('.reveal');
+      var h = window.innerHeight;
+      for (var i=0;i<els.length;i++){
+        var r = els[i].getBoundingClientRect();
+        if (r.top < h - 80) els[i].classList.add('show');
+      }
+    }
+    document.addEventListener('scroll', revealOnScroll);
+    window.addEventListener('load', revealOnScroll);
+  </script>
+</body>
+</html>

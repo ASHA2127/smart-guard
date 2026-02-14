@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Dashboard</title>
+  <style>
+    html, body { height: 100%; margin: 0; font-family: Arial, Helvetica, sans-serif; }
+    .bg { position: fixed; inset: 0; background: url('{{ bg_url }}') no-repeat center center fixed; background-size: cover; z-index: -1; }
+    .nav { background: #222; color: #fff; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .brand { font-weight: 700; }
+    .links a { color: #ccc; margin-left: 24px; text-decoration: none; font-size: 16px; }
+    .links a:hover { color: #fff; }
+    .hero { background:#0a0a0a; color:#fff; text-align:center; padding: 12px 20px; }
+    .hero h1 { margin:0; font-size: 20px; }
+    .hero h4 { margin:0; font-size: 14px; }
+    .wrap { max-width: 1100px; margin: 16px auto; padding: 16px; background: rgba(0,0,0,.55); border-radius: 10px; color: #fff; }
+    table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    thead th { background: rgba(255,255,255,.9); color:#000; font-weight: 700; padding: 10px; text-align: left; }
+    tbody td { padding: 10px; border-bottom: 1px solid rgba(255,255,255,.2); text-align: left; word-break: break-word; }
+    thead th, tbody td { vertical-align: top; }
+    .actions { display:flex; gap:8px; }
+    .btn { padding: 6px 10px; border: none; border-radius: 6px; cursor: pointer; font-weight:700; }
+    .approve { background: #28a745; color: #fff; }
+    .reject { background: #dc3545; color: #fff; }
+    .msg { text-align:center; font-weight:700; margin:12px 0; }
+    .error { color: #ffdddd; }
+    .success { color: #b2ffb2; }
+    #h2tag{
+      color: #c8c4c7;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+  <div class="nav">
+    <div class="brand">Smart Guard</div>
+    <div class="links">
+      <a href="{{ url_for('home') }}">Home</a>
+       <a href="{{ url_for('user_data') }}">User Data</a>
+      <a href="{{ url_for('admin_login') }}">Admin Login</a>
+    </div>
+  </div>
+  <div class="hero">
+    <h1>IOT POWER SPAM DETECTION SYSTEM</h1>
+    <h4>using machine learning</h4>
+  </div>
+  
+  <div class="wrap">
+    <div id="msg" class="msg"></div>
+    <table>
+      <colgroup>
+        <col style="width:20%">
+        <col style="width:28%">
+        <col style="width:16%">
+        <col style="width:12%">
+        <col style="width:24%">
+      </colgroup>
+      <thead>
+        <center>
+         <h2 id="h2tag"><b>Admin Dashboard</b></h2>
+         </center>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+        {% if users and users|length > 0 %}
+          {% for u in users %}
+            <tr>
+              <td>{{ u.name }}</td>
+              <td>{{ u.email }}</td>
+              <td>{{ u.phone }}</td>
+              <td>{{ u.status if u.status else 'pending' }}</td>
+              <td>
+                <div class="actions">
+                  <button class="btn approve" data-email="{{ u.email }}" data-phone="{{ u.phone }}">Approve</button>
+                  <button class="btn reject" data-email="{{ u.email }}" data-phone="{{ u.phone }}">Reject</button>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="5" style="text-align:center;">No user registrations found</td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+  <script>
+    (function(){
+      var msg = document.getElementById('msg');
+      function setMsg(text, ok){
+        msg.textContent = text || '';
+        msg.className = 'msg' + (ok ? ' success' : ' error');
+      }
+      function post(url, payload){
+        return fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      }
+      function onAction(e){
+        var t = e.target;
+        if (t.classList.contains('approve') || t.classList.contains('reject')){
+          var email = t.getAttribute('data-email');
+          var phone = t.getAttribute('data-phone');
+          var endpoint = t.classList.contains('approve') ? '/api/admin/approve' : '/api/admin/reject';
+          post(endpoint, { email: email, phone: phone })
+            .then(function(res){ return res.json().then(function(d){ return {ok:res.ok, status:res.status, d:d}; }); })
+            .then(function(out){
+              if (out.ok){
+                setMsg(out.d.message || 'Updated', true);
+                // refresh users table
+                return fetch('/api/admin/users').then(function(r){ return r.json(); }).then(function(list){
+                  var tbody = document.getElementById('tbody');
+                  tbody.innerHTML = '';
+                  if (!list || list.length === 0){
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No user registrations found</td></tr>';
+                    return;
+                  }
+                  list.forEach(function(u){
+                    var tr = document.createElement('tr');
+                    tr.innerHTML = '<td>'+ (u.name||'') +'</td>'+
+                                   '<td>'+ (u.email||'') +'</td>'+
+                                   '<td>'+ (u.phone||'') +'</td>'+
+                                   '<td>'+ ((u.status)||'pending') +'</td>'+
+                                   '<td><div class="actions">'+
+                                     '<button class="btn approve" data-email="'+(u.email||'')+'" data-phone="'+(u.phone||'')+'">Approve</button>'+ 
+                                     '<button class="btn reject" data-email="'+(u.email||'')+'" data-phone="'+(u.phone||'')+'">Reject</button>'+ 
+                                   '</div></td>';
+                    tbody.appendChild(tr);
+                  });
+                });
+              } else {
+                setMsg(out.d.message || 'Update failed', false);
+              }
+            })
+            .catch(function(){ setMsg('Network error', false); });
+        }
+      }
+      document.addEventListener('click', onAction);
+    })();
+  </script>
+</body>
+</html>

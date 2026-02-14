@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Upload CSV</title>
+  <style>
+    html, body { height: 100%; margin: 0; font-family: Arial, Helvetica, sans-serif; }
+    .bg { position: fixed; inset: 0; background: url('{{ bg_url }}') no-repeat center center fixed; background-size: cover; z-index: -1; }
+    .nav { background: #222; color: #fff; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .brand { font-weight: 700; }
+    .links a { color: #ccc; margin-left: 20px; text-decoration: none; font-size: 14px; }
+    .links a:hover { color: #fff; }
+    .hero { background:#0a0a0a; color:#fff; text-align:center; padding: 12px 20px; margin-bottom: 65px; }
+    .hero h1 { margin:0; font-size: 20px; }
+    .hero h4 { margin:0; font-size: 14px; }
+    .content { display:flex; justify-content:center; align-items:flex-start; padding: 20px; }
+    .card { width: 600px; background: rgba(0,0,0,.55); padding: 20px; border-radius: 10px; color: #fff; }
+    .card h2 { margin: 0 0 12px; text-align: center; font-size: 16px; text-transform: uppercase; }
+    .form-group { display:flex; align-items:center; gap:12px; margin-bottom: 14px; }
+    label { flex:0 0 160px; margin:0; font-weight:700; color:#000; background: rgba(255,255,255,.9); padding:10px 12px; border-radius:6px; }
+    input[type=file] { flex:1; padding: 10px 12px; border-radius: 6px; border: 1px solid #ddd; background: #fff; color:#000; }
+    .btn { width: 100%; padding: 12px; background: #007bff; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight:700; }
+    .btn:disabled { background: #6c757d; cursor: not-allowed; }
+    .msg { margin-top: 12px; text-align:center; font-weight:700; }
+    .error { color: #ffdddd; }
+    .success { color: #b2ffb2; }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+  <div class="nav">
+    <div class="brand">Smart Guard</div>
+    <div class="links">
+      <a href="./home.html">Home</a>
+      <a href="/user_login">User Login</a>
+      
+    </div>
+  </div>
+   <div class="hero">
+    <h1>IOT POWER SPAM DETECTION SYSTEM</h1>
+    <!-- <h4>using machine learning</h4> -->
+  </div>
+  <!-- <div class="hero">
+    <h2>Upload CSV</h2>
+  </div> -->
+  <div class="content">
+    <div class="card">
+      <h2>Select CSV File</h2>
+      <form id="csvForm" action="/preview" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="datasetfile">Upload File</label>
+          <input type="file" id="datasetfile" name="datasetfile" accept=".csv,text/csv" required />
+        </div>
+        <button type="submit" class="btn" id="uploadBtn" disabled>Upload</button>
+      </form>
+      <div class="msg" id="msg"></div>
+    </div>
+  </div>
+  <script>
+    (function(){
+      var fileInput = document.getElementById('datasetfile');
+      var btn = document.getElementById('uploadBtn');
+      var msg = document.getElementById('msg');
+      function isCsvFile(name){
+        return (name||'').toLowerCase().endsWith('.csv');
+      }
+      fileInput.addEventListener('change', function(){
+        var f = fileInput.files && fileInput.files[0];
+        if (!f){ btn.disabled = true; msg.textContent = ''; msg.className = 'msg'; return; }
+        if (!isCsvFile(f.name)){
+          btn.disabled = true;
+          msg.textContent = 'Only CSV files are allowed';
+          msg.className = 'msg error';
+        } else {
+          btn.disabled = false;
+          msg.textContent = '';
+          msg.className = 'msg';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
