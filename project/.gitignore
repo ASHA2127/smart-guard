@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environment
+venv/
+.env
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# ML models & datasets
+*.csv
+*.xlsx
+*.pkl
+*.joblib
+*.h5
+*.pt
+
+# Large files
+*.zip
+*.rar
+*.tar
+*.gz
+
+# Database
+db.sqlite3
+
+# System files
+.DS_Store
+Thumbs.db
+
+# executables & documents
+*.exe
+*.pdf
+*.json
