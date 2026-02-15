@@ -19,7 +19,7 @@ app = Flask(__name__, template_folder=TEMPLATES_DIR, static_folder=STATIC_DIR) #
 
 #forest = pickle.load(open('boosting.pkl','rb'))
 model = pickle.load(open('spam.pkl', 'rb'))
-LOCAL_IMG_DIR = r'D:\\mca project\\img'
+LOCAL_IMG_DIR = "img"
 SPAM_COUNT = 0
 NO_SPAM_COUNT = 0
 LAST_DEVICE_STATUS = []
