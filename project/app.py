@@ -17,9 +17,12 @@ TEMPLATES_DIR = os.path.join(APP_ROOT, 'templates')
 STATIC_DIR = os.path.join(APP_ROOT, 'static')
 app = Flask(__name__, template_folder=TEMPLATES_DIR, static_folder=STATIC_DIR) #Initialize the flask App
 
-#forest = pickle.load(open('boosting.pkl','rb'))
-model = pickle.load(open('spam.pkl', 'rb'))
-LOCAL_IMG_DIR = r'D:\\mca project\\img'
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+model_path = os.path.join(BASE_DIR, "spam.pkl")
+
+model = pickle.load(open(model_path, "rb"))
+LOCAL_IMG_DIR ='img'
 SPAM_COUNT = 0
 NO_SPAM_COUNT = 0
 LAST_DEVICE_STATUS = []
